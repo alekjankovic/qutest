@@ -1,10 +1,9 @@
 <template>
   <div id="app">
-    <div class="main-container">
+    <div class="page-container">
       <header class="main-header">
         <h1>Crypto Currencies best website</h1>
       </header>
-      {{ showLoader}}
       <router-view :key="$route.fullPath" v-on:show-loader="showLoader = true" v-on:hide-loader="showLoader = false" ></router-view>
       <Loader v-bind:showLoader="showLoader"></Loader>
     </div>

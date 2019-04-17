@@ -40,6 +40,12 @@ export default {
   background-color: #efefef;
   box-shadow: -1px 4px 4px #aaa;
   border-radius: 10px 0 0 10px;
+
+  -webkit-transition: all .2s ease;
+  -moz-transition: all .2s ease;
+  -o-transition: all .2s ease;
+  -ms-transition: all .2s ease;
+  transition: all .2s ease;
 }
 
 .loader-container.loader-show {

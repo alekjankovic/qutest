@@ -3,8 +3,10 @@
     <h2 class="main-header">Crypto Grid</h2>
 
     <div class="data-grid">
-      <div>
-        Current Page - {{page}}
+      <div class="data-grid-info">
+        <span>
+          Page - {{page}}
+        </span>
       </div>
       <div class="grid-container">
         <table class="crypto-grid">
@@ -16,6 +18,7 @@
             <th> last 24h </th>
             <th> Amount you own </th>
             <th> $ value of your coin </th>
+            <th> $ total gain </th>
           </tr>
         </thead>
         <tbody>
@@ -36,12 +39,18 @@
                 {{ item.quote.USD.percent_change_24h}} %
               </td>
               <td class="crypto-grid-action">
-                <input type="text" v-model="item.own" v-on:keyup="item.btndis = false" v-on:keyup.enter="submitCurrency(item )">
+                <input type="text" v-model="item.own" v-on:change.lazy="checkInput(item)" v-on:keyup.enter="submitCurrency(item )">
                 <button type="button" v-bind:disabled="item.btndis" v-on:click="submitCurrency(item)"  > Submit </button>
               </td>
               <td>
                 <span v-if="item.total"> $ </span>
                 {{ item.total }}
+              </td>
+              <td>
+                <span v-if="item.gain" v-bind:class="{ 'txt-red' : item.gain < 0 , 'txt-green' : item.gain > 0}">
+                  $ {{ item.gain }}
+                </span>
+
               </td>
             </tr>
           </template>
@@ -63,7 +72,7 @@ export default {
   name: 'CurrenciesGrid',
   mounted(){
     this.getGridData();
-    //this.setAutoRefresh(60000);
+    this.setAutoRefresh(60000);
   },
   data(){
     return {
@@ -102,10 +111,12 @@ export default {
         this.currencies = response.data.data.map(function(item){
           if(wallet && wallet[item.symbol]){
             item.own = wallet[item.symbol].own;
-            item.total = item.own * item.quote.USD.price;
+            item.total = Number.parseFloat(item.own * item.quote.USD.price).toFixed(3);
+            item.gain = Number.parseFloat(wallet[item.symbol].total - item.total).toFixed(3);
           } else {
             item.own = null;
             item.total = null;
+            item.gain = null;
           }
 
           item.btndis = true;
@@ -123,7 +134,7 @@ export default {
         }, timeInterval);
     },
     submitCurrency: function(item){
-      item.total = item.own * item.quote.USD.price;
+      item.total = Number.parseFloat(item.own * item.quote.USD.price).toFixed(3);
       let wallet;
 
       try{
@@ -144,8 +155,16 @@ export default {
       wallet[item.symbol].total = item.total;
 
       localStorage.setItem('wallet', JSON.stringify(wallet));
+    },
+    checkInput: function(item){
+      let reg = /^[0-9].[0-9]*$/;
+      let tst = reg.test(item.own);
+      if(tst == true){
+        item.btndis = false;
+      } else {
+        item.btndis = true;
+      }
     }
-
   },
   beforeDestroy(){
     //in order to stop fetching data when you go to another page
