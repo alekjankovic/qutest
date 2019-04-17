@@ -19,8 +19,8 @@
           </tr>
         </thead>
         <tbody>
-          <template v-for="item in currencies">
-            <tr>
+          <template v-for="item in currencies"  >
+            <tr v-bind:key="item.id">
               <td>
                 <router-link v-bind:to="'/Details/' + item.id" v-bind:title="'Go to ' + item.name + ' details page'" exact>
                   {{ item.name }}
@@ -49,8 +49,8 @@
       </div>
 
       <div class="grid-pagination">
-        <router-link v-bind:to="'/'" exact> 1 </router-link>
-        <router-link v-for="item in 4" v-bind:to="'' + ( item + 1)" exact>{{ item + 1 }}</router-link>
+        <router-link v-bind:to="'/'" v-bind:key="1" exact> 1 </router-link>
+        <router-link v-for="item in 4" v-bind:to="'' + ( item + 1)" v-bind:key="item + 1" exact>{{ item + 1 }}</router-link>
       </div>
     </div>
 
