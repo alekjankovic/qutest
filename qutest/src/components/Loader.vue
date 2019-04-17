@@ -16,7 +16,7 @@ export default {
     }
   },
   watch: {
-    showLoader: function(newVal, oldVal){
+    showLoader: function(newVal){
       if(newVal == true){
         this.loaderState++;
       } else{
