@@ -1,0 +1,115 @@
+* { /**/
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.clearfix:after {
+    content: " "; /* Older browser do not support empty content */
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+body {
+  font-family: "Source Sans Pro", sans-serif;
+  background-color: #efefef;
+  margin:0;
+  outline:none;
+}
+
+a, a:hover, a:visited, a:link, a:active {
+    text-decoration: none !important;
+}
+
+.main-container {
+  background-color:#fff;
+  max-width: 1170px;
+  margin:0 auto;
+}
+
+.main-header {
+  padding:30px;
+}
+
+.main-header h1 {
+  margin:0;
+}
+
+.data-grid {
+  padding:30px;
+}
+
+.grid-container {
+    min-height: 100px;
+}
+
+.crypto-grid {
+  width:100%;
+
+}
+
+.crypto-grid thead tr th {
+    background-color: #c5c5c5;
+}
+
+.crypto-grid tbody tr td {
+  background-color: #c5c5c5;
+}
+.crypto-grid tbody tr:nth-of-type(even) td {
+  background-color: #fff;
+}
+
+.crypto-grid tbody tr td {
+  text-align: center;
+  padding:4px 10px;
+}
+
+.txt-red {
+  color:red;
+}
+
+.txt-green {
+  color:green;
+}
+
+.crypto-grid-action {
+
+}
+
+.grid-pagination {
+  width:100%;
+  padding:40px 20px;
+  text-align: right;
+}
+
+.grid-pagination a {
+  display:inline-block;
+  height: 26px;
+  padding:4px 10px;
+  background-color: #fafafa;
+  border: 1px solid #aaa;
+
+}
+
+.grid-pagination a.router-link-active {
+  background-color: #ccc;
+}
+
+.currency-info {
+  padding: 40px 40px;
+}
+
+.detail-back-btn {
+  cursor:pointer;
+  margin-left:40px;
+}
+
+
+
+
+// $primary-color: red;
+// .main-header {
+//     color:$primary-color;
+// }
