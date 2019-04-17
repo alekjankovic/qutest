@@ -76,8 +76,13 @@ a, a:hover, a:visited, a:link, a:active {
   color:green;
 }
 
-.crypto-grid-action {
+.crypto-grid-action input {
+  outline: none;
 
+}
+
+.crypto-grid-action .error-border {
+  border:1px solid red;
 }
 
 .grid-pagination {

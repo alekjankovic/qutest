@@ -39,7 +39,7 @@
                 {{ item.quote.USD.percent_change_24h}} %
               </td>
               <td class="crypto-grid-action">
-                <input type="text" v-model="item.own" v-on:change.lazy="checkInput(item)" v-on:keyup.enter="submitCurrency(item )">
+                <input type="text" v-bind:class="{ 'error-border' : item.inputError }" v-model="item.own" v-on:keyup="checkInput(item)" v-on:keyup.enter="submitCurrency(item )">
                 <button type="button" v-bind:disabled="item.btndis" v-on:click="submitCurrency(item)"  > Submit </button>
               </td>
               <td>
@@ -120,6 +120,7 @@ export default {
           }
 
           item.btndis = true;
+          item.inputError = false;
           return item;
         });
       })
@@ -134,34 +135,39 @@ export default {
         }, timeInterval);
     },
     submitCurrency: function(item){
-      item.total = Number.parseFloat(item.own * item.quote.USD.price).toFixed(3);
-      let wallet;
+      this.checkInput(item);
+      if(item.inputError != true) {
+        item.total = Number.parseFloat(item.own * item.quote.USD.price).toFixed(3);
+        let wallet;
 
-      try{
-        wallet = JSON.parse(localStorage.getItem('wallet'));
-      } catch(ex){
-        console.error(ex);
+        try{
+          wallet = JSON.parse(localStorage.getItem('wallet'));
+        } catch(ex){
+          console.error(ex);
+        }
+
+        if(!wallet || typeof wallet !== 'object' ){
+          wallet = {};
+        }
+
+        if(!wallet[item.symbol]){
+          wallet[item.symbol] = {};
+        }
+
+        wallet[item.symbol].own = item.own;
+        wallet[item.symbol].total = item.total;
+
+        localStorage.setItem('wallet', JSON.stringify(wallet));
       }
-
-      if(!wallet || typeof wallet !== 'object' ){
-        wallet = {};
-      }
-
-      if(!wallet[item.symbol]){
-        wallet[item.symbol] = {};
-      }
-
-      wallet[item.symbol].own = item.own;
-      wallet[item.symbol].total = item.total;
-
-      localStorage.setItem('wallet', JSON.stringify(wallet));
     },
     checkInput: function(item){
-      let reg = /^[0-9].[0-9]*$/;
+      let reg = /^(-?\d+\.\d+)$|^(-?\d+)$/;
       let tst = reg.test(item.own);
       if(tst == true){
         item.btndis = false;
+        item.inputError = false;
       } else {
+        item.inputError = true;
         item.btndis = true;
       }
     }
