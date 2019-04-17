@@ -4,27 +4,27 @@
       <header class="main-header">
         <h1>Crypto Currencies best website</h1>
       </header>
-      <router-view :key="$route.fullPath"></router-view>
+      {{ showLoader}}
+      <router-view :key="$route.fullPath" v-on:show-loader="showLoader = true" v-on:hide-loader="showLoader = false" ></router-view>
+      <Loader v-bind:showLoader="showLoader"></Loader>
     </div>
   </div>
 </template>
 
 <script>
 
+import Loader from './components/Loader.vue'
+
+
 export default {
   name: 'app',
   data(){
     return {
-      loaderState: 0
-
+      showLoader: false,
     }
   },
   components: {
-  },
-  methods: {
-    showLoader(){
-      this.loaderState++;
-    }
+    Loader
   }
 }
 </script>

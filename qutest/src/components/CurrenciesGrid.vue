@@ -30,7 +30,7 @@
                 {{ item.symbol }}
               </td>
               <td>
-                {{ item.quote.USD.price }}
+                $ {{ item.quote.USD.price }}
               </td>
               <td v-bind:class="{ 'txt-red' : item.quote.USD.percent_change_24h < 0 , 'txt-green' : item.quote.USD.percent_change_24h > 0}">
                 {{ item.quote.USD.percent_change_24h}} %
@@ -40,6 +40,7 @@
                 <button type="button" v-bind:disabled="item.btndis" v-on:click="submitCurrency(item)"  > Submit </button>
               </td>
               <td>
+                <span v-if="item.total"> $ </span>
                 {{ item.total }}
               </td>
             </tr>
@@ -62,8 +63,7 @@ export default {
   name: 'CurrenciesGrid',
   mounted(){
     this.getGridData();
-    console.log("Mount");
-    this.setAutoRefresh(60000);
+    //this.setAutoRefresh(60000);
   },
   data(){
     return {
@@ -74,7 +74,9 @@ export default {
     }
   },
   methods: {
-    getGridData() {
+    getGridData: function() {
+      this.$emit('show-loader');
+
       let limit = this.resultPerPage;
       let start = (this.page  * limit) - 1 ;
       let apiurl = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=' + start + '&limit=' + limit;
@@ -88,6 +90,7 @@ export default {
         }
       })
       .then(response => {
+        this.$emit('hide-loader');
         let wallet;
 
         try{
@@ -110,15 +113,16 @@ export default {
         });
       })
       .catch(error => {
+        this.$emit('hide-loader');
         console.log(error);
       });
     },
-    setAutoRefresh(timeInterval){
+    setAutoRefresh: function(timeInterval){
         this.autoRefreshIntervalSet = setInterval(() => {
           this.getGridData();
         }, timeInterval);
     },
-    submitCurrency(item){
+    submitCurrency: function(item){
       item.total = item.own * item.quote.USD.price;
       let wallet;
 

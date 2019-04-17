@@ -30,7 +30,8 @@ export default {
     this.getCurrentCurrency();
   },
   methods: {
-    getCurrentCurrency(){
+    getCurrentCurrency: function(){
+      this.$emit('show-loader');
       this.axios({
         method: 'get',
         url: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/info?id=' + this.id,
@@ -40,9 +41,11 @@ export default {
         }
       })
       .then(response => {
+        this.$emit('hide-loader');
         this.currency = response.data.data[this.id];
       })
       .catch(error => {
+        this.$emit('hide-loader');
         console.log(error);
       });
 
